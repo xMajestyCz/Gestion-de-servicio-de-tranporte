@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EstadoOrden {
+  pendiente
+  en_ruta
+  entregado
+  cancelado
+}
+
+model Cliente {
+  id      Int     @id @default(autoincrement())
+  nombre  String
+  ordenes Orden[]
+
+  @@map("clientes")
+}
+
+model Conductor {
+  id      Int     @id @default(autoincrement())
+  nombre  String
+  ordenes Orden[]
+
+  @@map("conductores")
+}
+
+model Orden {
+  id            Int         @id @default(autoincrement())
+  clienteId     Int
+  conductorId   Int
+  fecha         DateTime
+  estado        EstadoOrden @default(pendiente)
+  observaciones String?
+  creadoEn      DateTime    @default(now())
+  actualizadoEn DateTime    @updatedAt
+
+  cliente   Cliente   @relation(fields: [clienteId], references: [id])
+  conductor Conductor @relation(fields: [conductorId], references: [id])
+
+  @@map("ordenes")
+}

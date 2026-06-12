@@ -1,0 +1,59 @@
+1. necito hacer esto
+Construye una aplicación web para gestión de órdenes de servicio de transporte.
+La aplicación debe permitir:
+• Crear una orden con los siguientes datos: cliente, fecha, conductor asignado, estado inicial (Pendiente) y observaciones opcionales
+• Listar todas las órdenes existentes con sus datos
+• Editar una orden existente
+• Cancelar una orden (cambiar su estado a Cancelado — no eliminar de la base de datos)
+• Filtrar las órdenes por estado (Pendiente I En ruta I Entregado | Cancelado) o por conductor
+• Persistir los datos en una base de datos — el motor es tu elección
+Estados válidos de una orden: Pendiente En ruta Entregado. Cancelado puede activarse desde cualquier estado.
+voy a trabajar con postgresql, ts, react, tailwind y express, que otra herramienta me recomiendas utilizar y ademas quiero que me configures los archivos de tsconfig y package.json
+
+2. explicame mas en detalle por que esas herramientas? no las he utilizado y creo que seria mejor trabajar con lo que se que agregar mas tecnologias, este no es un proyecto de gran impacto, solo una prueba
+
+3. primero explicame estas cosas
+1. const conductorId = req.query.conductorId ? parseInt(req.query.conductorId as string) : undefined; por lo que logro entender convierte la query del id del conductor en un int porque el enpoint es como tal un string y el undefined es por si el id no coincide con el id de algun conductor en la bd
+2. tengo entendido que en una funcion async siempre dentro de ella se espera un await, por que en los servicios no hay ningun await pero aca si const ordenes = await OrdenService.obtenerOrdenes(estado, conductorId);
+3. por que typeof y no simplemente ordenes? const respuesta: RespuestaAPI<typeof ordenes>
+ademas tengo errores con esto 
+const id = parseInt(req.params.id); Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+
+4.index.js:43
+    throw new Error('@prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.');
+          ^
+Error: @prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.
+    at new PrismaClient (C:\Users\henao\OneDrive\Documentos\git-y-github\Gestion-de-servicio-de-tranporte\backend\node_modules\@prisma\client\scripts\default-index.js:43:11)
+    at <anonymous> (C:\Users\henao\OneDrive\Documentos\git-y-github\Gestion-de-servicio-de-tranporte\backend\src\lib\prisma.ts:5:16)
+    at Object.<anonymous> (C:\Users\henao\OneDrive\Documentos\git-y-github\Gestion-de-servicio-de-tranporte\backend\src\lib\prisma.ts:7:16)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object.transformer (C:\Users\henao\OneDrive\Documentos\git-y-github\Gestion-de-servicio-de-tranporte\backend\node_modules\tsx\dist\register-BOkp8V6j.cjs:9:3176)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+estuve viendo en foros y dicen que el problema principal es con el output
+generator client {
+  provider = "prisma-client-js"
+  output = "../generated/prisma"
+}
+lo agregue a ver si se solucionaba el error y aun asi sigue apareciendo
+
+5. tengo preguntas respecto a api.ts
+
+que hace URLSearchParams() junto a .append? por lo que logre entender es que el primero busca en el endpoint y el segundo evalua si coincide con el valor ingresado en el endpoint y en base a eso te arroja el json
+esto me imagino que es mas que todo para abarcar todos los tipos de get en ordenes cierto? por que ? y no /, se que ? es opcional como por ejemplo a la hora de buscar por estado y por conductor, explicame mejor porque esa eleccion
+const url = `${BASE_URL}/ordenes${params.toString() ? `?${params}` : ""}`
+recuerdame lo que hace fetch
+esto me imagino que es que muestra todos los datos o por el contrario la tabla esta vacio, devuelve un array vacio
+return data.datos ?? []
+veo que no está el crear cliente ni crear conductor, ademas en algunas funciones especificas los method a expecion del get, si no se pone, el fetch ya pone get por defecto?
+he visto otros tipos de headers, porque el content-Type y no otro?
+esto me imagino que es que le pasamos un json en el body y o que hace es en la respuesta luego del 200 te pase el resultado como string cierto?
+body: JSON.stringify(body)
+que significa ??
+Error(data.mensaje ?? "Error al crear orden")
+que hace el ! al final
+return data.datos!
